@@ -13,12 +13,14 @@ class BMIApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark().copyWith(
+        // sliderTheme: SliderThemeData().of,
         scaffoldBackgroundColor: Color(0xff0A0D22),
         appBarTheme: AppBarTheme(
           backgroundColor: Color.fromARGB(255, 14, 18, 48),
         ),
       ),
       home: HomeScreen(),
+      
     );
   }
 }

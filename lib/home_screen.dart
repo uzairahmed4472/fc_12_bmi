@@ -1,14 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:fc_12_bmi/constants.dart';
+import 'package:fc_12_bmi/result_screen.dart';
+import 'package:fc_12_bmi/utility.dart';
 import 'package:fc_12_bmi/widgets/reusable_card.dart';
 import 'package:fc_12_bmi/widgets/reusable_container.dart';
 import 'package:flutter/material.dart';
-
-const kTextStyle1 = TextStyle(
-  fontSize: 18,
-  fontWeight: FontWeight.bold,
-);
-int height = 150;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,10 +15,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  BMIFunction BMIObject = BMIFunction();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // leading: Icon(Icons.),
         title: Center(
           child: Text(
             "BMI Calculator",
@@ -32,21 +32,40 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           Expanded(
+            flex: 3,
             child: Row(
               children: [
                 Expanded(
-                  child: ReusableContainer(
-                    childContainer: ReusableCard(
-                      text: "MALE",
-                      icon: Icons.male,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        
+                      BMIObject.selectGender(Gender.male);
+                      });
+                    },
+                    child: ReusableContainer(
+                      colour: BMIObject.color1,
+                      childContainer: ReusableCard(
+                        text: "MALE",
+                        icon: Icons.male,
+                      ),
                     ),
                   ),
                 ),
                 Expanded(
-                  child: ReusableContainer(
-                    childContainer: ReusableCard(
-                      text: "FEMALE",
-                      icon: Icons.female,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        
+                      BMIObject.selectGender(Gender.female);
+                      });
+                    },
+                    child: ReusableContainer(
+                      colour: BMIObject.color2,
+                      childContainer: ReusableCard(
+                        text: "FEMALE",
+                        icon: Icons.female,
+                      ),
                     ),
                   ),
                 ),
@@ -54,21 +73,34 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Expanded(
+            flex: 3,
             child: ReusableContainer(
+              colour: kActiveColor,
               childContainer: Column(
                 children: [
                   Text("HEIGHT"),
-                  Text("$height CM"),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(
+                        "${BMIObject.height}",
+                        style: TextStyle(fontSize: 40),
+                      ),
+                      Text("cm")
+                    ],
+                  ),
                   Slider(
                     min: 140,
                     max: 200,
                     thumbColor: Colors.pink,
                     activeColor: Colors.red,
                     inactiveColor: Colors.white,
-                    value: height.toDouble(),
+                    value: BMIObject.height.toDouble(),
                     onChanged: (newValue) {
                       setState(() {
-                        height = newValue.round();
+                        BMIObject.height = newValue.round();
                       });
                     },
                   )
@@ -77,45 +109,134 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Expanded(
+            flex: 3,
             child: Row(
               children: [
                 Expanded(
                   child: ReusableContainer(
-                    childContainer: Text('data'),
+                    colour: kActiveColor,
+                    childContainer: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('WEIGHT'),
+                        Text('${BMIObject.weight}'),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            RawMaterialButton(
+                              fillColor: Colors.grey,
+                              onPressed: () {
+                                BMIObject.onDecrement(1);
+                              },
+                              shape: CircleBorder(),
+                              constraints: BoxConstraints(
+                                minWidth: 45,
+                                minHeight: 45,
+                                maxHeight: 50,
+                                maxWidth: 50,
+                              ),
+                              child: Icon(Icons.remove),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            RawMaterialButton(
+                              fillColor: Colors.grey,
+                              onPressed: () {
+                                BMIObject.onIncrement(1);
+                              },
+                              shape: CircleBorder(),
+                              constraints: BoxConstraints(
+                                minWidth: 45,
+                                minHeight: 45,
+                                maxHeight: 50,
+                                maxWidth: 50,
+                              ),
+                              child: Icon(Icons.add),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
                   child: ReusableContainer(
-                    childContainer: Row(
+                    colour: kActiveColor,
+                    childContainer: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          width: 10,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(500)),
-                          child: IconButton(
-                            color: Colors.red,
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.remove,
+                        Text('AGE'),
+                        Text('${BMIObject.age}'),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            RawMaterialButton(
+                              fillColor: Colors.grey,
+                              onPressed: () {
+                                BMIObject.onDecrement(2);
+                              },
+                              shape: CircleBorder(),
+                              constraints: BoxConstraints(
+                                minWidth: 45,
+                                minHeight: 45,
+                                maxHeight: 50,
+                                maxWidth: 50,
+                              ),
+                              child: Icon(Icons.remove),
                             ),
-                          ),
-                        ), Container(
-                          width: 10,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(500)),
-                          child: IconButton(
-                            color: Colors.red,
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.remove,
+                            SizedBox(
+                              width: 10,
                             ),
-                          ),
+                            RawMaterialButton(
+                              fillColor: Colors.grey,
+                              onPressed: () {
+                                BMIObject.onIncrement(2);
+                              },
+                              shape: CircleBorder(),
+                              constraints: BoxConstraints(
+                                minWidth: 45,
+                                minHeight: 45,
+                                maxHeight: 50,
+                                maxWidth: 50,
+                              ),
+                              child: Icon(Icons.add),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
                 ),
               ],
+            ),
+          ),
+          Expanded(
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return ResultScreen(
+                        weight: BMIObject.weight,
+                        height: BMIObject.height,
+                      );
+                    },
+                  ),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.all(10),
+                color: Colors.pink,
+                child: Center(
+                  child: Text("CALCULATE BMI"),
+                ),
+              ),
             ),
           ),
         ],
